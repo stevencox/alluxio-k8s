@@ -51,12 +51,7 @@ spec:
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
-        #command: ["/bin/chown","-R", "1000:1000", "/journal"]
-        command: 
-        - /bin/bash
-        args:
-        - -c
-        - /bin/chown -R 1000:1000 /tmp; /bin/chown -R 1000:1000 /journal
+        command: ["/bin/chown","-R", "1000:1000", "/journal"]
         volumeMounts:
         - name: alluxio-journal
           mountPath: /journal
@@ -117,8 +112,6 @@ spec:
       restartPolicy: Always
       volumes:
        - name: alluxio-journal
-         hostPath:
-           path: /opt/alluxio-2.2.0-SNAPSHOT/underFSStorage
-#         persistentVolumeClaim:
-#           claimName: alluxio-journal-alluxio-master-0
+         persistentVolumeClaim:
+           claimName: alluxio-journal-alluxio-master-0
 

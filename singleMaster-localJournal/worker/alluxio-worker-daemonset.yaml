@@ -48,6 +48,8 @@ spec:
         image: alluxio/alluxio:2.2.0-SNAPSHOT
         command: ["/bin/chown","-R", "1000:1000", "/opt/domain"]
         volumeMounts:
+        - name: alluxio-journal
+          mountPath: /journal
         - name: alluxio-domain
           mountPath: /opt/domain
       containers:
@@ -82,6 +84,8 @@ spec:
           - containerPort: 30000
             name: web
           volumeMounts:
+            - name: alluxio-journal
+              mountPath: /journal
             - name: alluxio-domain
               mountPath: /opt/domain
             - mountPath: /dev/shm
@@ -118,12 +122,17 @@ spec:
           - containerPort: 30003
             name: job-web
           volumeMounts:
+            - name: alluxio-journal
+              mountPath: /journal
             - name: alluxio-domain
               mountPath: /opt/domain
             - mountPath: /dev/shm
               name: mem
       restartPolicy: Always
       volumes:
+        - name: alluxio-journal
+          persistentVolumeClaim:
+            claimName: alluxio-journal-alluxio-master-0
         - name: alluxio-domain
           hostPath:
             path: /tmp/alluxio-domain
